@@ -1,0 +1,45 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Make Your Picks</h2>
+<p class="text-muted">All kickoff times shown are converted to Pacific Time (PT). Picks lock at kickoff.</p>
+<form method="post">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Bowl/Game</th>
+        <th>Matchup</th>
+        <th>Kickoff (PT)</th>
+        <th>Network</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in games %}
+      <tr>
+        <td>{{ g['game_date'] or '' }}</td>
+        <td>{{ g['bowl_name'] }}</td>
+        <td>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="pick_{{ g['id'] }}" id="t1_{{ g['id'] }}" value="team1" {% if picks_map.get(g['id'])=='team1' %}checked{% endif %}
+                   {% if g['is_cfp'] and g['disp_team1'] is none %}disabled{% endif %}>
+            <label class="form-check-label" for="t1_{{ g['id'] }}">{{ g['disp_team1'] or g['team1'] }}</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="pick_{{ g['id'] }}" id="t2_{{ g['id'] }}" value="team2" {% if picks_map.get(g['id'])=='team2' %}checked{% endif %}
+                   {% if g['is_cfp'] and g['disp_team2'] is none %}disabled{% endif %}>
+            <label class="form-check-label" for="t2_{{ g['id'] }}">{{ g['disp_team2'] or g['team2'] }}</label>
+          </div>
+          {% if g['is_cfp'] and (g['disp_team1'] is none or g['disp_team2'] is none) %}
+          <div class="text-danger small">Make prior round picks first.</div>
+          {% endif %}
+        </td>
+        <td>{{ g['kickoff_pt'] or '' }}</td>
+        <td>{{ g['network'] or '' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button type="submit" class="btn btn-success">Save Picks</button>
+</form>
+{% endblock %}

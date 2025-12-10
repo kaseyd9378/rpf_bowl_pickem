@@ -1,0 +1,26 @@
+
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Join a Contest</h2>
+      <p>Use the access code from your manager to join.</p>
+      <a href="{{ url_for('join_form') }}" class="btn btn-primary">Join Contest</a>
+    </div>
+    <div class="col-md-6">
+      <h2>Admin</h2>
+      <p>Create a new contest or log in as manager.</p>
+      <a href="{{ url_for('create_contest_form') }}" class="btn btn-outline-primary">Create Contest</a>
+      <a href="{{ url_for('admin_login_form') }}" class="btn btn-outline-secondary ms-2">Manager Login</a>
+    </div>
+  </div>
+  <hr>
+  <h3>Active Contests</h3>
+  <ul>
+    {% for c in contests %}
+      <li>Contest #{{ c['id'] }}: {{ c['name'] }}</li>
+    {% else %}
+      <li>No contests yet. Create one as Admin.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

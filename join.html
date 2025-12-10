@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Join Contest</h2>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Your Name (as shown on scoreboard)</label>
+    <input type="text" name="display_name" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Contest ID</label>
+    <input type="number" name="contest_id" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Access Code</label>
+    <input type="text" name="access_code" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Join</button>
+</form>
+{% endblock %}

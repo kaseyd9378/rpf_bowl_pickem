@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Create Contest</h2>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Contest Name</label>
+    <input type="text" name="name" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Access Code (share with players)</label>
+    <input type="text" name="access_code" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Admin Code (for manager login)</label>
+    <input type="text" name="admin_code" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{% endblock %}

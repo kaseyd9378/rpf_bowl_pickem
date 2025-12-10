@@ -1,0 +1,43 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<h2>Manager: Set Winners & Load Schedule</h2>
+<form method="post">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Bowl/Game</th>
+        <th>Teams</th>
+        <th>Winner</th>
+        <th>Points/Win</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for g in games %}
+      <tr>
+        <td>{{ g['game_date'] or '' }}</td>
+        <td>{{ g['bowl_name'] }}</td>
+        <td>{{ g['team1'] }} vs. {{ g['team2'] }}</td>
+        <td>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="winner_{{ g['id'] }}" id="w1_{{ g['id'] }}" value="team1" {% if g['winner']=='team1' %}checked{% endif %}>
+            <label class="form-check-label" for="w1_{{ g['id'] }}">{{ g['team1'] }}</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="winner_{{ g['id'] }}" id="w2_{{ g['id'] }}" value="team2" {% if g['winner']=='team2' %}checked{% endif %}>
+            <label class="form-check-label" for="w2_{{ g['id'] }}">{{ g['team2'] }}</label>
+          </div>
+        </td>
+        <td>{{ g['points_per_win'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button type="submit" class="btn btn-primary">Update Winners</button>
+</form>
+<hr>
+<form action="{{ url_for('admin_scrape') }}" method="post">
+  <button type="submit" class="btn btn-outline-secondary">Scrape NCAA Schedule & Rebuild CFP Links</button>
+</form>
+{% endblock %}
