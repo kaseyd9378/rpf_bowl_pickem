@@ -10,9 +10,11 @@ PT = ZoneInfo('America/Los_Angeles')
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key')
 
-@app.before_first_request
-def setup():
+
+# Initialize the database when the app is created (Flask 3.x safe)
+with app.app_context():
     init_db()
+
 
 # Helpers
 
