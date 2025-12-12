@@ -37,14 +37,21 @@ def require_manager():
     return True
 
 # Routes
-@app.get('/')
+@app.get("/")
 def landing():
+    # Flask auto-adds HEAD when GET is present, but being explicit and tolerant helps.
+    # If you want to skip template rendering on HEAD:
+    if request.method == "HEAD":
+        # return headers only; Flask/Werkzeug will drop the body for HEAD anyway.
+        return "", 200
+    # Normal GET flow:
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute('SELECT id, name FROM contests ORDER BY created_at DESC')
+    cur.execute("SELECT id, name FROM contests ORDER BY created_at DESC")
     contests = cur.fetchall()
     conn.close()
-    return render_template('landing.html', contests=contests)
+    return render_template("landing.html", contests=contests)
+
 
 @app.get('/contest/create')
 def create_contest_form():
