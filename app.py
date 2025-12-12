@@ -23,6 +23,18 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key')
 
 
+@app.get("/debug/routes")
+def debug_routes():
+    # returns a list of (endpoint, methods, rule) so you can confirm /healthz exists
+    rules = []
+    for rule in app.url_map.iter_rules():
+        rules.append({
+            "endpoint": rule.endpoint,
+            "methods": sorted(m for m in rule.methods if m not in {"HEAD", "OPTIONS"}),
+            "rule": str(rule)
+               })
+
+
 # Initialize the database when the app is created (Flask 3.x safe)
 with app.app_context():
     init_db()
@@ -304,7 +316,5 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-@app.route("/healthz", methods=["GET", "HEAD"])
-def healthz():
-    return "ok", 200
+
 
