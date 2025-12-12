@@ -4,6 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from db import init_db, get_conn
+import logging
 
 PT = ZoneInfo('America/Los_Angeles')
 
@@ -37,20 +38,27 @@ def require_manager():
     return True
 
 # Routes
+
 @app.get("/")
 def landing():
-    # Flask auto-adds HEAD when GET is present, but being explicit and tolerant helps.
-    # If you want to skip template rendering on HEAD:
-    if request.method == "HEAD":
-        # return headers only; Flask/Werkzeug will drop the body for HEAD anyway.
-        return "", 200
-    # Normal GET flow:
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("SELECT id, name FROM contests ORDER BY created_at DESC")
-    contests = cur.fetchall()
-    conn.close()
-    return render_template("landing.html", contests=contests)
+    try:
+        conn = get_conn()
+        cur = conn.cursor        cur = conn.cursor()
+        cur.execute("SELECT id, name FROM contests ORDER BY created_at DESC")
+        contests = cur.fetchall()
+        conn.close()
+
+        # HEAD-safe: return headers quickly without rendering (optional)
+        if request.method == "HEAD":
+            return "", 200
+
+        return render_template("landing.html", contests=contests)
+
+    except Exception as e:
+        # Structured logging to stderr (Gunicorn will capture it with --error-logfile -)
+        logging.exception("Landing route failed")
+        # Friendly error for users while we investigate
+
 
 
 @app.get('/contest/create')
