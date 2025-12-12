@@ -66,7 +66,7 @@ def require_manager():
 def landing():
     try:
         conn = get_conn()
-        cur = conn.cursor        cur = conn.cursor()
+        cur = conn.cursor()
         cur.execute("SELECT id, name FROM contests ORDER BY created_at DESC")
         contests = cur.fetchall()
         conn.close()
