@@ -6,6 +6,17 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from db import init_db, get_conn
 import logging
 
+# app.py
+
+from flask import Flask
+
+app = Flask(__name__, template_folder="templates", static_folder="static")
+
+# --- Health check route (GET & HEAD) ---
+@app.route("/healthz", methods=["GET", "HEAD"])
+def healthz():
+    return "ok", 200
+
 PT = ZoneInfo('America/Los_Angeles')
 
 app = Flask(__name__)
