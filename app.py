@@ -316,5 +316,26 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
+@app.get("/debug/templates")
+def debug_templates():
+    import os
+    root = os.getcwd()  # on Render, this should be /opt/render/project/src
+    tdir = os.path.join(root, "templates")
+    try:
+        files = os.listdir(tdir)
+    except Exception as e:
+        files = [f"<error: {e}>"]
+    return {"cwd": root, "templates_list": files}, 200
+
+@app.get("/debug/routes")
+def debug_routes():
+       rules = []
+    for rule in app.url_map.iter_rules():
+        rules.append({
+            "endpoint": rule.endpoint,
+            "methods": sorted(m for m in rule.methods if m not in {"HEAD", "OPTIONS"}),
+            "rule": str(rule)
+        })
+
 
 
